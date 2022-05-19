@@ -1,12 +1,13 @@
 {
   "name": "simple-reveal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "exports": {
     ".": {
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
-    }
+    },
+    "./index.css": "./dist/index.css"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
