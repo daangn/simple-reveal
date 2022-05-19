@@ -6,7 +6,7 @@ const base = ({ entryPoints = ["./src/index.ts"], outdir = "dist" }) => ({
   outdir,
   target: "es2015",
   bundle: true,
-  minify: false,
+  minify: true,
   external: ["react"],
   plugins: [vanillaExtractPlugin()],
   sourcemap: true,
