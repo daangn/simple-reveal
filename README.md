@@ -41,6 +41,8 @@ const MyComponent: React.FC = () => {
 You can add animations using `<SimpleReveal />` like this:
 
 ```tsx
+import "simple-reveal/index.css";
+
 import React from "react";
 import { SimpleReveal } from "simple-reveal";
 
