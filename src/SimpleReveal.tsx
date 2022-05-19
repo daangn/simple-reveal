@@ -13,11 +13,26 @@ function setVars($el: HTMLElement, vars: { [key: string]: string }) {
   });
 }
 
+function useEffectWithRefCurrent<T extends HTMLElement>(
+  ref: React.RefObject<T>,
+  cb: (current: T) => (() => void) | void,
+  deps: any[]
+) {
+  useEffect(() => (ref.current ? cb(ref.current) : () => {}), [ref, ...deps]);
+}
+
+function useMounted() {
+  const [mounted, mount] = useReducer(() => true, false);
+
+  useEffect(() => {
+    mount();
+  }, [mount]);
+
+  return mounted;
+}
+
 interface SimpleRevealProps {
-  render: (
-    ref: React.RefObject<any>,
-    className: (n: string) => string
-  ) => React.ReactNode;
+  render: (ref: React.RefObject<any>) => React.ReactNode;
   duration?: number;
   delay?: number;
   initialTransform?: string;
@@ -28,65 +43,63 @@ const SimpleReveal: React.FC<SimpleRevealProps> = ({
   delay = 0,
   initialTransform = "translateY(1rem)",
 }) => {
+  const mounted = useMounted();
+
   const [revealed, reveal] = useReducer(() => true, false);
   const [delayIgnored, ignoreDelay] = useReducer(() => true, false);
 
-  const [mounted, mount] = useReducer(() => true, false);
-
-  useEffect(() => {
-    mount();
-  }, [mount]);
-
   const ref = useRef<any>(null);
 
-  useEffect(() => {
-    const $el = ref.current;
+  useEffectWithRefCurrent(
+    ref,
+    (current) => {
+      setVars(current, {
+        [css.vars.delay]: delayIgnored ? "0ms" : `${delay}ms`,
+        [css.vars.duration]: `${duration}ms`,
+        [css.vars.initialTransform]: initialTransform,
+      });
+    },
+    [duration, delayIgnored, delay, initialTransform]
+  );
 
-    if (!$el) {
-      return;
-    }
+  useEffectWithRefCurrent(
+    ref,
+    (current) => {
+      const onScroll: IntersectionObserverCallback = ([e]) => {
+        if (e.isIntersecting) {
+          reveal();
+        } else if (!mounted) {
+          ignoreDelay();
+        }
+      };
 
-    setVars($el, {
-      [css.vars.delay]: delayIgnored ? "0ms" : `${delay}ms`,
-      [css.vars.duration]: `${duration}ms`,
-      [css.vars.initialTransform]: initialTransform,
-    });
-  }, [duration, delayIgnored, delay, initialTransform]);
+      const obs = new IntersectionObserver(onScroll, {
+        threshold: [0],
+      });
+      obs.observe(current);
 
-  useEffect(() => {
-    const onScroll: IntersectionObserverCallback = ([e]) => {
-      if (e.isIntersecting) {
-        reveal();
+      return () => {
+        obs.unobserve(current);
+      };
+    },
+    []
+  );
+
+  useEffectWithRefCurrent(
+    ref,
+    (current) => {
+      [css.themeClass, css.base].map(current.classList.add);
+
+      if (revealed) {
+        current.classList.add(css.revealed);
+      } else {
+        current.classList.remove(css.revealed);
       }
-      if (!mounted && !e.isIntersecting) {
-        ignoreDelay();
-      }
-    };
+    },
+    [revealed]
+  );
 
-    const obs = new IntersectionObserver(onScroll, {
-      threshold: [0],
-    });
-
-    const $el = ref.current;
-
-    if (!$el) {
-      return () => {};
-    }
-
-    obs.observe($el);
-
-    return () => {
-      obs.unobserve($el);
-      obs.disconnect();
-    };
-  }, [ref]);
-
-  const className = (base: string) =>
-    [base, css.themeClass, css.base, ...(revealed ? [css.revealed] : [])].join(
-      " "
-    );
-
-  return <>{render(ref, className)}</>;
+  return <>{render(ref)}</>;
 };
 
 export default SimpleReveal;
