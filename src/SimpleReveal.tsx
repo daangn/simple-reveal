@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useCallback, useEffect, useReducer, useRef } from "react";
 
 import * as css from "./SimpleReveal.css";
 
@@ -32,7 +32,10 @@ function useMounted() {
 }
 
 interface SimpleRevealProps {
-  render: (ref: React.RefObject<any>) => React.ReactNode;
+  render: (args: {
+    ref: React.RefObject<any>;
+    cn: (base?: string) => string;
+  }) => React.ReactNode;
   duration?: number;
   delay?: number;
   initialTransform?: string;
@@ -85,21 +88,22 @@ const SimpleReveal: React.FC<SimpleRevealProps> = ({
     []
   );
 
-  useEffectWithRefCurrent(
-    ref,
-    (current) => {
-      [css.themeClass, css.base].map(current.classList.add);
+  const cn = useCallback(
+    (base?: string): string => {
+      const classNames: string[] = [base, css.themeClass, css.base].filter(
+        (e): e is string => !!e
+      );
 
       if (revealed) {
-        current.classList.add(css.revealed);
-      } else {
-        current.classList.remove(css.revealed);
+        classNames.push(css.revealed);
       }
+
+      return classNames.join(" ");
     },
     [revealed]
   );
 
-  return <>{render(ref)}</>;
+  return <>{render({ ref, cn })}</>;
 };
 
 export default SimpleReveal;

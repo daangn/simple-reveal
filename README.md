@@ -50,8 +50,8 @@ const MyComponent: React.FC = () => {
   return (
     <div>
       <SimpleReveal
-        render={(ref, className) => (
-          <h1 ref={ref} className="title">
+        render={({ ref, cn }) => (
+          <h1 ref={ref} className={cn("title")}>
             I want to put a reveal animation here
           </h1>
         )}
