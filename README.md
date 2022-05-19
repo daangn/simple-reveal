@@ -16,6 +16,10 @@ A simple scroll animation library
   - The delay only works when it is first revealed, and disables the delay when it is revealed when scrolling.
 - TypeScript Support
 
+## Demo
+
+[![Edit SimpleReveal Demo](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simplereveal-demo-xzmf57?fontsize=14&hidenavigation=1&theme=dark)
+
 ## Getting started
 
 ```bash
