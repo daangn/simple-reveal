@@ -6,7 +6,7 @@
 ![](https://img.shields.io/github/contributors/daangn/simple-reveal)
 ![](https://img.shields.io/github/last-commit/daangn/simple-reveal)
 
-A simple scroll animation library
+A simple scroll animation library in React
 
 - Zero-dependency
 - No additional DOM element
