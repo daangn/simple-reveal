@@ -19,6 +19,7 @@
     "build": "concurrently \"yarn:build:*\"",
     "build:bundle:dts": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
     "build:bundle:js": "node ./esbuild.config.js",
+    "prepack": "yarn build",
     "test": "jest",
     "test:watch": "jest --watch"
   },
