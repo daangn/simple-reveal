@@ -15,6 +15,7 @@ A simple scroll animation library in React
 - Automatically compensates transition delay
   - The delay only works when it is first revealed, and disables the delay when it is revealed when scrolling.
 - TypeScript Support
+- Respect `@media (prefers-reduced-motion)`
 
 ## Demo
 
