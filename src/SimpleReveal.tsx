@@ -99,7 +99,7 @@ const SimpleReveal: React.FC<SimpleRevealProps> = ({
 
       return classNames.join(" ");
     },
-    [ref, revealed]
+    [revealed]
   );
 
   return render({ ref, cn });
