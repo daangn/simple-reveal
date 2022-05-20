@@ -35,7 +35,7 @@ interface SimpleRevealProps {
   render: (args: {
     ref: React.RefObject<any>;
     cn: (base?: string) => string;
-  }) => React.ReactNode;
+  }) => React.ReactElement<any, any> | null;
   duration?: number;
   delay?: number;
   initialTransform?: string;
@@ -90,9 +90,13 @@ const SimpleReveal: React.FC<SimpleRevealProps> = ({
 
   const cn = useCallback(
     (base?: string): string => {
-      const classNames: string[] = [base, css.themeClass, css.base].filter(
-        (e): e is string => !!e
-      );
+      const baseClassList = base ? base.split(" ") : [];
+
+      if (!ref.current) {
+        return baseClassList.join(" ");
+      }
+
+      const classNames = [...baseClassList, css.themeClass, css.base];
 
       if (revealed) {
         classNames.push(css.revealed);
@@ -100,10 +104,10 @@ const SimpleReveal: React.FC<SimpleRevealProps> = ({
 
       return classNames.join(" ");
     },
-    [revealed]
+    [ref, revealed]
   );
 
-  return <>{render({ ref, cn })}</>;
+  return render({ ref, cn });
 };
 
 export default SimpleReveal;
