@@ -91,11 +91,6 @@ const SimpleReveal: React.FC<SimpleRevealProps> = ({
   const cn = useCallback(
     (base?: string): string => {
       const baseClassList = base ? base.split(" ") : [];
-
-      if (!ref.current) {
-        return baseClassList.join(" ");
-      }
-
       const classNames = [...baseClassList, css.themeClass, css.base];
 
       if (revealed) {
