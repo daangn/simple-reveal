@@ -5,7 +5,7 @@ import { useSimpleReveal } from "./useSimpleReveal";
 type UseSimpleRevealParam = Parameters<typeof useSimpleReveal>[0];
 type UseSimpleRevealReturnType = ReturnType<typeof useSimpleReveal>;
 
-interface SimpleRevealProps extends UseSimpleRevealParam {
+interface SimpleRevealProps extends NonNullable<UseSimpleRevealParam> {
   render: (
     args: UseSimpleRevealReturnType
   ) => React.ReactElement<any, any> | null;

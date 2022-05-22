@@ -2,6 +2,10 @@ import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 
 import * as css from "./useSimpleReveal.css";
 
+const DEFAULT_DELAY = 0;
+const DEFAULT_DURATION = 500;
+const DEFAULT_INITIAL_TRANSFORM = "translateY(1rem)";
+
 function getVarName(variable: string) {
   const matches = variable.match(/^var\((.*)\)$/);
   return matches ? matches[1] : variable;
@@ -31,11 +35,7 @@ function useMounted() {
   return mounted;
 }
 
-export function useSimpleReveal({
-  delay = 0,
-  duration = 500,
-  initialTransform = "translateY(1rem)",
-}: {
+export function useSimpleReveal(param?: {
   delay?: number;
   duration?: number;
   initialTransform?: string;
@@ -43,6 +43,10 @@ export function useSimpleReveal({
   ref: React.RefObject<any>;
   cn: (base?: string) => string;
 } {
+  const delay = param?.delay ?? DEFAULT_DELAY;
+  const duration = param?.duration ?? DEFAULT_DURATION;
+  const initialTransform = param?.initialTransform ?? DEFAULT_INITIAL_TRANSFORM;
+
   const mounted = useMounted();
 
   const [revealed, reveal] = useReducer(() => true, false);
