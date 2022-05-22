@@ -43,7 +43,7 @@ const MyComponent: React.FC = () => {
 };
 ```
 
-You can add animations using `<SimpleReveal />` like this:
+You can add animations using `<SimpleReveal />` component like this:
 
 ```tsx
 import "simple-reveal/index.css";
@@ -65,6 +65,31 @@ const MyComponent: React.FC = () => {
         delay={0}
         initialTransform="translateY(1rem)"
       />
+    </div>
+  );
+};
+```
+
+Or you can use animation using `useSimpleReveal()` hook like this:
+
+```tsx
+import "simple-reveal/index.css";
+
+import React from "react";
+import { useSimpleReveal } from "simple-reveal";
+
+const MyComponent: React.FC = () => {
+  const { ref, cn } = useSimpleReveal({
+    duration: 500,
+    delay: 0,
+    initialTransform: "translateY(1rem)",
+  });
+
+  return (
+    <div>
+      <h1 ref={ref} className={cn("title")}>
+        I want to put a reveal animation here
+      </h1>
     </div>
   );
 };
