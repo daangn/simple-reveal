@@ -55,8 +55,8 @@ const MyComponent: React.FC = () => {
   return (
     <div>
       <SimpleReveal
-        render={({ ref, cn }) => (
-          <h1 ref={ref} className={cn("title")}>
+        render={({ ref, cn, style }) => (
+          <h1 ref={ref} className={cn("title")} style={style}>
             I want to put a reveal animation here
           </h1>
         )}
@@ -79,7 +79,7 @@ import React from "react";
 import { useSimpleReveal } from "simple-reveal";
 
 const MyComponent: React.FC = () => {
-  const { ref, cn } = useSimpleReveal({
+  const { ref, cn, style } = useSimpleReveal({
     duration: 500,
     delay: 0,
     initialTransform: "translateY(1rem)",
@@ -87,7 +87,7 @@ const MyComponent: React.FC = () => {
 
   return (
     <div>
-      <h1 ref={ref} className={cn("title")}>
+      <h1 ref={ref} className={cn("title")} style={style}>
         I want to put a reveal animation here
       </h1>
     </div>

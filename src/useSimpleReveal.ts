@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from "react";
 
 import * as css from "./useSimpleReveal.css";
 
@@ -9,12 +15,6 @@ const DEFAULT_INITIAL_TRANSFORM = "translateY(1rem)";
 function getVarName(variable: string) {
   const matches = variable.match(/^var\((.*)\)$/);
   return matches ? matches[1] : variable;
-}
-
-function setVars($el: HTMLElement, vars: { [key: string]: string }) {
-  Object.entries(vars).forEach(([key, value]) => {
-    $el.style.setProperty(getVarName(key), value);
-  });
 }
 
 function useEffectWithRefCurrent<T extends HTMLElement>(
@@ -42,6 +42,7 @@ export function useSimpleReveal(param?: {
 }): {
   ref: React.RefObject<any>;
   cn: (base?: string) => string;
+  style: React.CSSProperties;
 } {
   const delay = param?.delay ?? DEFAULT_DELAY;
   const duration = param?.duration ?? DEFAULT_DURATION;
@@ -53,18 +54,6 @@ export function useSimpleReveal(param?: {
   const [delayIgnored, ignoreDelay] = useReducer(() => true, false);
 
   const ref = useRef<any>(null);
-
-  useEffectWithRefCurrent(
-    ref,
-    (current) => {
-      setVars(current, {
-        [css.vars.delay]: delayIgnored ? "0ms" : `${delay}ms`,
-        [css.vars.duration]: `${duration}ms`,
-        [css.vars.initialTransform]: initialTransform,
-      });
-    },
-    [duration, delayIgnored, delay, initialTransform]
-  );
 
   useEffectWithRefCurrent(
     ref,
@@ -103,10 +92,20 @@ export function useSimpleReveal(param?: {
     [revealed]
   );
 
+  const style = useMemo<React.CSSProperties>(
+    () => ({
+      [getVarName(css.vars.delay)]: delayIgnored ? "0ms" : `${delay}ms`,
+      [getVarName(css.vars.duration)]: `${duration}ms`,
+      [getVarName(css.vars.initialTransform)]: initialTransform,
+    }),
+    [delayIgnored, delay, duration, initialTransform]
+  );
+
   return useMemo(
     () => ({
       ref,
       cn,
+      style,
     }),
     [ref, cn]
   );
