@@ -75,7 +75,7 @@ export function useSimpleReveal(param?: {
         obs.unobserve(current);
       };
     },
-    []
+    [mounted]
   );
 
   const cn = useCallback(
