@@ -1,9 +1,10 @@
 {
   "name": "simple-reveal",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "license": "MIT",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
