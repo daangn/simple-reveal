@@ -35,18 +35,20 @@ function useMounted() {
   return mounted;
 }
 
-export function useSimpleReveal(param?: {
+export function useSimpleReveal(params?: {
   delay?: number;
   duration?: number;
   initialTransform?: string;
+  rootMargin?: string;
 }): {
   ref: React.RefObject<any>;
   cn: (base?: string) => string;
   style: React.CSSProperties;
 } {
-  const delay = param?.delay ?? DEFAULT_DELAY;
-  const duration = param?.duration ?? DEFAULT_DURATION;
-  const initialTransform = param?.initialTransform ?? DEFAULT_INITIAL_TRANSFORM;
+  const delay = params?.delay ?? DEFAULT_DELAY;
+  const duration = params?.duration ?? DEFAULT_DURATION;
+  const initialTransform =
+    params?.initialTransform ?? DEFAULT_INITIAL_TRANSFORM;
 
   const mounted = useMounted();
 
@@ -68,6 +70,7 @@ export function useSimpleReveal(param?: {
 
       const obs = new IntersectionObserver(onScroll, {
         threshold: [0],
+        rootMargin: params?.rootMargin,
       });
       obs.observe(current);
 
